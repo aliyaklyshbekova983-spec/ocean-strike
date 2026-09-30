@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ocean Strike — Морской бой</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"><span class="radar-ring"></span>✦</span>
+        <div><b>OCEAN STRIKE</b><small>МОРСКОЙ БОЙ · NAVAL STRATEGY</small></div>
+      </div>
+      <div class="top-actions">
+        <span id="syncBadge" class="badge">Локальное сохранение</span>
+        <span id="turnBadge" class="badge">Подготовка</span>
+        <button id="homeBtn" class="ghost-btn">Главная</button>
+        <button id="loginBtn" class="ghost-btn">Войти</button>
+        <button id="profileBtn" class="ghost-btn hidden">Профиль</button>
+        <button id="newGameBtn" class="ghost-btn">Новая игра</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="homeScreen" class="screen home-screen">
+        <div class="home-hero">
+          <div class="hero-copy">
+            <div class="eyebrow">NARXOZ INCUBATOR • 2026</div>
+            <div class="home-title-row">
+              <div>
+                <h1>OCEAN<br><span>STRIKE</span></h1>
+                <p class="home-lead">Тактический морской бой, где каждый выстрел меняет ход сражения.</p>
+              </div>
+              <div class="radar-orb" aria-hidden="true"><i></i><i></i><i></i><b>O</b></div>
+            </div>
+            <div class="home-actions">
+              <button id="homePlayBtn" class="primary-btn home-play">Начать игру <span>→</span></button>
+              <button id="resumeBtn" class="ghost-btn home-resume hidden">Продолжить игру</button>
+            </div>
+            <div class="home-note"><span>●</span> Игра сохраняет прогресс и результаты для авторизованных пользователей.</div>
+          </div>
+          <div class="home-visual" aria-hidden="true">
+            <div class="ocean-grid"></div>
+            <div class="hero-ship ship-one"><span></span><i></i></div>
+            <div class="hero-ship ship-two"><span></span><i></i></div>
+            <div class="hero-ship ship-three"><span></span><i></i></div>
+            <div class="target-ring"></div>
+            <div class="home-coordinate">A 01 / SECTOR 07</div>
+          </div>
+        </div>
+
+        <div class="home-features">
+          <article><span>01</span><b>Умный противник</b><p>Три уровня сложности. На Normal и Hard компьютер учитывает попадания и продолжает поиск рядом.</p></article>
+          <article><span>02</span><b>Твоя история</b><p>Авторизация, статистика побед и поражений, история партий и сохранение прогресса.</p></article>
+          <article><span>03</span><b>Тактика радара</b><p>Две попытки радара помогают проверить случайную зону 3×3 и принять решение о следующем ходе.</p></article>
+        </div>
+
+        <div class="home-bottom">
+          <div><strong>10×10</strong><span>поле боя</span></div>
+          <div><strong>3</strong><span>уровня AI</span></div>
+          <div><strong>10</strong><span>кораблей во флоте</span></div>
+          <div><strong>2</strong><span>заряда радара</span></div>
+        </div>
+      </section>
+
+      <section id="startScreen" class="screen start-screen hidden">
+        <div class="hero-card">
+          <div class="eyebrow">NARXOZ INCUBATOR • 2026</div>
+          <h1>Готовы к<br><span>морскому бою?</span></h1>
+          <p>Расставьте флот, выбирайте цель и уничтожьте корабли противника раньше, чем он найдёт ваши.</p>
+          <div class="start-grid">
+            <label>Сложность
+              <select id="difficulty">
+                <option value="easy">Easy — случайные ходы</option>
+                <option value="normal" selected>Normal — охота после попадания</option>
+                <option value="hard">Hard — стратегия и поиск</option>
+              </select>
+            </label>
+            <div class="feature"><span>⚡</span><div><b>Radar ×2</b><small>Проверяет зону 3×3</small></div></div>
+            <div class="feature"><span>◈</span><div><b>Умный AI</b><small>Запоминает предыдущие ходы</small></div></div>
+          </div>
+          <p id="authHint" class="auth-hint">Войдите, чтобы сохранять прогресс, историю и статистику в базе данных.</p><button id="startBtn" class="primary-btn">Начать игру <span>→</span></button>
+          <button id="backHomeBtn" class="ghost-btn wide-btn start-back">← Вернуться на главную</button>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen hidden">
+        <div class="game-head">
+          <div>
+            <div class="eyebrow">OCEAN STRIKE</div>
+            <h2 id="statusTitle">Ваш ход</h2>
+            <p id="statusText">Нажмите на клетку справа. Попадание даёт ещё один выстрел; промах передаёт ход AI.</p>
+          </div>
+          <div class="stats">
+            <div><b id="hitStat">0</b><span>Попадания</span></div>
+            <div><b id="missStat">0</b><span>Промахи</span></div>
+            <div><b id="sunkStat">0</b><span>Потоплено</span></div>
+          </div>
+        </div>
+
+        <div class="boards">
+          <section class="board-card">
+            <div class="board-title">
+              <div><span class="dot blue"></span><b>Ваш флот</b></div>
+              <span id="playerFleetCount">10 кораблей</span>
+            </div>
+            <div class="board-wrap">
+              <div class="coord-top" aria-hidden="true"><span>А</span><span>Б</span><span>В</span><span>Г</span><span>Д</span><span>Е</span><span>Ж</span><span>З</span><span>И</span><span>К</span></div>
+              <div class="board-with-side">
+                <div class="coord-side" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+                <div id="playerBoard" class="board player-board"></div>
+              </div>
+            </div>
+          </section>
+          <section class="board-card enemy-card">
+            <div class="board-title">
+              <div><span class="dot red"></span><b>Флот противника</b></div>
+              <span id="enemyFleetCount">10 кораблей</span>
+            </div>
+            <div class="board-wrap">
+              <div class="coord-top" aria-hidden="true"><span>А</span><span>Б</span><span>В</span><span>Г</span><span>Д</span><span>Е</span><span>Ж</span><span>З</span><span>И</span><span>К</span></div>
+              <div class="board-with-side">
+                <div class="coord-side" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+                <div id="enemyBoard" class="board enemy-board"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="control-row">
+          <button id="radarBtn" class="radar-btn">◉ Radar <span id="radarCount">2</span></button>
+          <button id="rotateBtn" class="ghost-btn">↻ Повернуть</button>
+          <button id="randomBtn" class="ghost-btn">⤨ Случайная расстановка</button>
+          <details class="rules">
+            <summary>Правила</summary>
+            <div class="rules-popover">
+              <b>Как играть</b>
+              <p>Стреляйте по правому полю. Попадание позволяет стрелять ещё раз, промах передаёт ход компьютеру.</p>
+              <p>Уничтожьте весь флот противника раньше, чем он уничтожит ваш.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="fleet-panel">
+          <div class="panel-title">Ваш флот</div>
+          <div id="fleetList" class="fleet-list"></div>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="screen hidden result-screen">
+        <div class="result-card">
+          <div id="resultIcon" class="result-icon">🏆</div>
+          <div class="eyebrow">ИГРА ЗАВЕРШЕНА</div>
+          <h1 id="resultTitle">Победа!</h1>
+          <p id="resultText"></p>
+          <div id="finalStats" class="final-stats"></div>
+          <button id="playAgainBtn" class="primary-btn">Сыграть ещё <span>→</span></button>
+        </div>
+      </section>
+    </main>
+
+    <footer>Ocean Strike • Сделано для Narxoz Incubator 2026</footer>
+  </div>
+
+  <div id="authModal" class="modal hidden">
+    <div class="modal-card auth-card">
+      <button id="authClose" class="modal-close">×</button>
+      <div class="eyebrow">OCEAN STRIKE ACCOUNT</div>
+      <h2 id="authTitle">Войти в игру</h2>
+      <p id="authDescription">Уже есть аккаунт? Введите логин и пароль. Если аккаунта ещё нет — нажмите «Создать аккаунт».</p>
+      <input id="authUsername" class="auth-input" placeholder="Придумайте логин" autocomplete="username">
+      <input id="authEmail" class="auth-input" placeholder="Ваша электронная почта" type="email" autocomplete="email" style="display:none">
+      <input id="authPassword" class="auth-input" placeholder="Придумайте пароль" type="password" autocomplete="new-password">
+      <button id="authLogin" class="primary-btn">Войти</button>
+      <button id="authRegister" class="ghost-btn wide-btn">Создать аккаунт</button>
+      <button id="authBack" class="text-btn" style="display:none">← Вернуться ко входу</button>
+      <small id="authError" style="display:block;min-height:20px;margin-top:10px"></small><small>При регистрации нужны электронная почта и пароль минимум из 6 символов.</small>
+    </div>
+  </div>
+  <div id="profileModal" class="modal hidden">
+    <div class="modal-card profile-card">
+      <button id="profileClose" class="modal-close">×</button>
+      <div class="eyebrow">ЛИЧНЫЙ ПРОФИЛЬ</div>
+      <h2 id="authUser">Профиль</h2>
+      <div id="profileStats" class="profile-stats"></div>
+      <h3>Последние партии</h3>
+      <div id="historyList" class="history-list"></div>
+      <button id="logoutBtn" class="ghost-btn wide-btn">Выйти</button>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="game-v19.js"></script>
+</body>
+</html>
